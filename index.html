@@ -89,4 +89,19 @@ window.addEventListener('beforeinstallprompt', e=>{e.preventDefault();deferredIn
 window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;const b=document.getElementById('installBtn');if(b)b.style.display='none';showToast('Poker Bankroll instalado no Windows');});
 async function installPWA(){if(!deferredInstallPrompt){showToast('Use Chrome/Edge em HTTPS ou localhost para instalar');return;}deferredInstallPrompt.prompt();const r=await deferredInstallPrompt.userChoice;if(r.outcome==='accepted'){const b=document.getElementById('installBtn');if(b)b.style.display='none';}deferredInstallPrompt=null;}
 </script>
+
+<script>
+const APP_VERSION="1.0";
+async function verificarAtualizacao(){
+ try{
+  const r=await fetch('https://melechhamelachim.github.io/poker-bankroll/version.json?x='+Date.now());
+  const v=await r.json();
+  if(v.versao!==APP_VERSION){
+    showToast('🔔 Nova versão disponível: '+v.versao);
+  } else {
+    showToast('✅ Seu Poker Bankroll está atualizado');
+  }
+ }catch(e){showToast('Não foi possível verificar atualização');}
+}
+</script>
 </body></html>
