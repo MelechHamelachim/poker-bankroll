@@ -91,17 +91,34 @@ async function installPWA(){if(!deferredInstallPrompt){showToast('Use Chrome/Edg
 </script>
 
 <script>
-const APP_VERSION="1.0";
-async function verificarAtualizacao(){
- try{
-  const r=await fetch('https://melechhamelachim.github.io/poker-bankroll/version.json?x='+Date.now());
-  const v=await r.json();
-  if(v.versao!==APP_VERSION){
-    showToast('🔔 Nova versão disponível: '+v.versao);
-  } else {
-    showToast('✅ Seu Poker Bankroll está atualizado');
+const VERSAO_ATUAL = "1.0";
+
+async function verificarAtualizacao() {
+  try {
+    const resposta = await fetch(
+      "https://melechhamelachim.github.io/poker-bankroll/version.json?nocache=" + Date.now()
+    );
+
+    const dados = await resposta.json();
+
+    if (dados.versao !== VERSAO_ATUAL) {
+      alert(
+        "🔔 Nova versão disponível!\n\n" +
+        "Versão atual: " + VERSAO_ATUAL +
+        "\nNova versão: " + dados.versao +
+        "\n\nNovidades:\n- " +
+        dados.novidades.join("\n- ")
+      );
+    } else {
+      alert("✅ Seu Poker Bankroll está atualizado!");
+    }
+
+  } catch (erro) {
+    alert("Não foi possível verificar atualização.");
   }
- }catch(e){showToast('Não foi possível verificar atualização');}
 }
 </script>
+<button onclick="verificarAtualizacao()">
+🔄 Verificar atualização
+</button>
 </body></html>
