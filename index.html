@@ -103,12 +103,12 @@ async function verificarAtualizacao() {
 
     if (dados.versao !== VERSAO_ATUAL) {
       alert(
-        "🔔 Nova versão disponível!\n\n" +
-        "Versão atual: " + VERSAO_ATUAL +
-        "\nNova versão: " + dados.versao +
-        "\n\nNovidades:\n- " +
-        dados.novidades.join("\n- ")
-      );
+  "🔔 Nova atualização disponível!\n\n" +
+  "Versão instalada: " + VERSAO_ATUAL +
+  "\nNova versão: " + dados.versao +
+  "\n\nNovidades:\n- " +
+  dados.novidades.join("\n- ")
+);
     } else {
       alert("✅ Seu Poker Bankroll está atualizado!");
     }
