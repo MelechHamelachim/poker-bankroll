@@ -1,0 +1,18 @@
+POKER BANKROLL — INSTALAÇÃO COMO APP DO WINDOWS
+
+1. Extraia esta pasta.
+2. O PWA precisa ser aberto por HTTPS ou localhost para o Windows oferecer a instalação.
+3. Se você já tem Python instalado, abra o PowerShell nesta pasta e execute:
+
+   python -m http.server 8080
+
+4. Abra no Chrome ou Edge:
+   http://localhost:8080
+
+5. Clique em "⬇ Instalar app" dentro do Poker Bankroll.
+
+Depois de instalado, ele aparece como um aplicativo próprio no Windows, com ícone e janela sem a barra normal do navegador.
+
+Se o botão de instalação não aparecer, use o menu do navegador e procure por "Instalar Poker Bankroll".
+
+Os dados do aplicativo ficam salvos localmente no computador. Use Exportar para criar backups JSON.
