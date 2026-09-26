@@ -1,5 +1,5 @@
 const CACHE = 'poker-bankroll-v3';
-const ASSETS = ['./', './index.html', './manifest.webmanifest', './sw.js', './icons/icon-192.png?v=3', './icons/icon-512.png?v=3'];
+const ASSETS = ['./', './index.html', './manifest.webmanifest', './sw.js', './icons/icon-192.png', './icons/icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
 });

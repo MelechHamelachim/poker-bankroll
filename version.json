@@ -1,8 +1,9 @@
 {
-  "versao": "1.1",
-  "data": "24/09/2026",
+  "versao": "1.2",
+  "data": "26/09/2026",
   "novidades": [
     "Cadastro simplificado com Data, Sala, Buy-in e Cash",
-    "Melhorias do Poker Bankroll Premium"
+    "Melhorias do Poker Bankroll Premium",
+    "Registro de saques no caixa com impacto no bankroll"
   ]
 }
