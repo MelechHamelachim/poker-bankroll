@@ -31,7 +31,9 @@ const rooms=initial.config.rooms; const cashRooms=initial.config.cashRooms;
 function monthKey(d){return d.slice(0,7)} function monthLabel(k){let [y,m]=k.split('-');return new Date(+y,+m-1,1).toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}
 function ensureMonth(k,seed=true){if(!store.months[k]){let prev=Object.keys(store.months).sort().filter(x=>x<k).pop();let start=prev?endingBankroll(store.months[prev]):0;store.months[k]={config:{...initial.config,month:k+'-01'},daily:[],cash:[],withdrawals:[],closed:false,openingBankroll:start}}}
 function active(){ensureMonth(store.currentMonth);return store.months[store.currentMonth]}
-function save(){localStorage.setItem('pokerBankrollMulti',JSON.stringify(store));updateHeader();render()}
+function save(){localStorage.setItem('pokerBankrollMulti',JSON.stringify(store));updateHeader();render()
+  autoBackup();
+}
 function updateHeader(){let m=active();document.getElementById('monthtitle').textContent=monthLabel(store.currentMonth);document.getElementById('monthstatus').innerHTML=m.closed?'<span class="closed">🔒 Mês fechado</span>':'Mês aberto'}
 function changeMonth(n){let [y,m]=store.currentMonth.split('-').map(Number);let d=new Date(y,m-1+n,1);store.currentMonth=d.toISOString().slice(0,7);ensureMonth(store.currentMonth);save()}
 function newMonth(){let [y,m]=store.currentMonth.split('-').map(Number);let d=new Date(y,m,1);let k=d.toISOString().slice(0,7);ensureMonth(k);store.currentMonth=k;save();showToast('Novo mês criado')}
@@ -143,4 +145,36 @@ navigator.serviceWorker.addEventListener('controllerchange', () => {
 window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;const b=document.getElementById('installBtn');if(b)b.style.display='none';showToast('Poker Bankroll instalado no Windows');});
 async function installPWA(){if(!deferredInstallPrompt){showToast('Use Chrome/Edge em HTTPS ou localhost para instalar');return;}deferredInstallPrompt.prompt();const r=await deferredInstallPrompt.userChoice;if(r.outcome==='accepted'){const b=document.getElementById('installBtn');if(b)b.style.display='none';}deferredInstallPrompt=null;}
 </script>
+
+<script>
+/* Backup automático — acrescentado sem alterar os dados ou funções existentes. */
+function autoBackup() {
+  try {
+    if (typeof store === 'undefined') return;
+    localStorage.setItem('poker-bankroll-last-auto-backup', JSON.stringify({
+      savedAt: new Date().toISOString(),
+      store: store
+    }));
+  } catch (e) {}
+}
+
+function downloadAutomaticBackup() {
+  try {
+    if (typeof store === 'undefined') return;
+    const blob = new Blob([JSON.stringify(store, null, 2)], {type:'application/json'});
+    const a = document.createElement('a');
+    const d = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    const name = `poker-bankroll-backup-${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}.json`;
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  } catch (e) {}
+}
+
+/* Mantém uma cópia local automática mesmo sem download. */
+window.addEventListener('beforeunload', autoBackup);
+</script>
+
 </body></html>
