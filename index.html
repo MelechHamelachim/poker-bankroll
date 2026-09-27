@@ -31,7 +31,33 @@ const rooms=initial.config.rooms; const cashRooms=initial.config.cashRooms;
 function monthKey(d){return d.slice(0,7)} function monthLabel(k){let [y,m]=k.split('-');return new Date(+y,+m-1,1).toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}
 function ensureMonth(k,seed=true){if(!store.months[k]){let prev=Object.keys(store.months).sort().filter(x=>x<k).pop();let start=prev?endingBankroll(store.months[prev]):0;store.months[k]={config:{...initial.config,month:k+'-01'},daily:[],cash:[],withdrawals:[],closed:false,openingBankroll:start}}}
 function active(){ensureMonth(store.currentMonth);return store.months[store.currentMonth]}
-function save(){localStorage.setItem('pokerBankrollMulti',JSON.stringify(store));updateHeader();render()
+function save(){
+  const uiState = window.__pokerUiState || {};
+  const gd=document.getElementById('gdate'), gr=document.getElementById('groom'), gt=document.getElementById('gtype');
+  const cd=document.getElementById('cdate'), cr=document.getElementById('croom'), ct=document.getElementById('ctype');
+  if(gd) uiState.gdate=gd.value;
+  if(gr) uiState.groom=gr.value;
+  if(gt) uiState.gtype=gt.value;
+  if(cd) uiState.cdate=cd.value;
+  if(cr) uiState.croom=cr.value;
+  if(ct) uiState.ctype=ct.value;
+  window.__pokerUiState=uiState;
+
+  localStorage.setItem('pokerBankrollMulti',JSON.stringify(store));
+  updateHeader();
+  render();
+
+  const state=window.__pokerUiState||{};
+  const rgd=document.getElementById('gdate'), rgr=document.getElementById('groom'), rgt=document.getElementById('gtype');
+  const rcd=document.getElementById('cdate'), rcr=document.getElementById('croom'), rct=document.getElementById('ctype');
+  if(rgd && state.gdate && monthKey(state.gdate)===store.currentMonth) rgd.value=state.gdate;
+  if(rgr && state.groom && Array.from(rgr.options).some(o=>o.value===state.groom || o.text===state.groom)) rgr.value=state.groom;
+  if(rgt && state.gtype && Array.from(rgt.options).some(o=>o.value===state.gtype)) rgt.value=state.gtype;
+  if(rgt) grindTypeChanged();
+  if(rcr && state.croom && Array.from(rcr.options).some(o=>o.value===state.croom || o.text===state.croom)) rcr.value=state.croom;
+  if(rcd && state.cdate && monthKey(state.cdate)===store.currentMonth) rcd.value=state.cdate;
+  if(rct && state.ctype && Array.from(rct.options).some(o=>o.value===state.ctype || o.text===state.ctype)) rct.value=state.ctype;
+
   autoBackup();
 }
 function updateHeader(){let m=active();document.getElementById('monthtitle').textContent=monthLabel(store.currentMonth);document.getElementById('monthstatus').innerHTML=m.closed?'<span class="closed">🔒 Mês fechado</span>':'Mês aberto'}
