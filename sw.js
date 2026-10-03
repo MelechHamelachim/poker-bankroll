@@ -1,4 +1,4 @@
-const CACHE = 'poker-bankroll-v4';
+const CACHE = 'poker-bankroll-v5';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './sw.js', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', event => {
